@@ -15,6 +15,12 @@ export const Recipes = () => {
       });
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      getRecipeList();
+    }
+  };
+
   return (
     <>
       <header className="header">
@@ -37,6 +43,7 @@ export const Recipes = () => {
                     placeholder="Search here..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleKeyPress} // Add the event listener
                   />
                   <button className="button" onClick={getRecipeList}>
                     Search
