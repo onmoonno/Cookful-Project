@@ -1,8 +1,22 @@
-# Getting Started with Create React App
+# The Backend:
+created with node.js, express.js, database is postgresSQL.
+## To start Backend:
+
+- Use Terminal command 'cd Backend/node-api-postgres', Navigate into /Backend/node-api-postgres directory.
+- Enter the your local postgres database's "user, host, database name, password, port" in the 'queries.js' and 'testConnection.js' file. The placeholder in the code is 'do not know yet'.
+- Use Terminal command 'node index.js', to run the backend server.
+- Open http://localhost:3000 to view it in your browser. There should be a json message {"info": "Node.js, Express, and Postgres API"}
+- Open http://localhost:3000/recipes/?ingredients=egg,beef change the parameters to view the query result.
+- To test if the backend connected well, use Terminal command "node testConnection.js"
+
+## After running backend server, keep the server running, then run the frontend app as follow.
+
+
+# Getting Started with Create React  App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Available Script s
 
 In the project directory, you can run:
 
@@ -10,9 +24,14 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- when run the backend and frondend simutaneously at local, the terminal would ask "Something is already running on port 3000. Probably:
+  node index.js (pid 87789), Would you like to run the app on another port instead? › (Y/n)
+  " type "Y", to run the frontend at port 3001.
+- Then the web page can be view at [http://localhost:3001]
+- The page will reload when you make changes.\
+- You may also see any lint errors in the console.
+  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
 ### `npm test`
 
