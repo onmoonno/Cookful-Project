@@ -7,6 +7,7 @@ const pool = new Pool({
     port: 5432,
 });
 
+
 const getRecipesByIngredients = (request, response) => {
     const { ingredients } = request.query;
 
