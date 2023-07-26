@@ -16,7 +16,7 @@ created with node.js, express.js, database is postgresSQL.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Script s
+## Available Scripts
 
 In the project directory, you can run:
 
