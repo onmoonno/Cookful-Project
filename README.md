@@ -3,7 +3,8 @@ created with node.js , express.js, database is postgresSQL.
 ## To start Backend:
 
 - Use Terminal  command 'cd Backend/node-api-postgres', Navigate into /Backend/node-api-postgres directory.
-- Enter the your local postgres database's "user, host, database name, password, port" in the 'queries.js' and 'testConnection.js' file. The placeholder in the code is 'do not know yet'.
+- Use Terminal command 'npm install' to download the node models.
+- Change the credentials: in the 'queries.js' file and 'testConnection.js' file, Enter the your local postgres database's "user, host, database name, password, port". The placeholder in the code is 'do not know yet'.
 - Use Terminal command 'node index.js', to run the backend server.
 - Open http://localhost:3000 to view it in your browser. There should be a json message {"info": "Node.js, Express, and Postgres API"}
 - Open http://localhost:3000/recipes/?ingredients=egg,beef change the parameters to view the query result.
