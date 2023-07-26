@@ -1,6 +1,6 @@
 # The Backend:
 created with node.js, express.js, database is postgresSQL.
-## To start Backend:
+## To start Backend :
 
 - Use Terminal command 'cd Backend/node-api-postgres', Navigate into /Backend/node-api-postgres directory.
 - Enter the your local postgres database's "user, host, database name, password, port" in the 'queries.js' and 'testConnection.js' file. The placeholder in the code is 'do not know yet'.
