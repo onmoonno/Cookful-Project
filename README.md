@@ -1,5 +1,5 @@
 # The Backend:
-created with node.js, express.js, database is postgresSQL.
+created with node.js , express.js, database is postgresSQL.
 ## To start Backend:
 
 - Use Terminal  command 'cd Backend/node-api-postgres', Navigate into /Backend/node-api-postgres directory.
