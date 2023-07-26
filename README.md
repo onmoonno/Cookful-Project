@@ -12,7 +12,7 @@ created with node.js, express.js, database is postgresSQL.
 ## After running backend server, keep the server running, then run the frontend app as follow.
 
 
-# Getting Started with Create React  App
+# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
