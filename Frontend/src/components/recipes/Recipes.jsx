@@ -8,18 +8,13 @@ export const Recipes = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   function getRecipeList() {
-    fetch(`http://localhost:3000/recipes/?ingredients=${searchQuery}`)
+    fetch(`http://localhost:8080/api/recipes?recIngredients=${searchQuery}`)
       .then((response) => response.json())
-      .then((data) => {
-        setRecipeList(data);
+      .then((data) => {//???
+        console.log(data);
+        setRecipeList(data);//???
       });
   }
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      getRecipeList();
-    }
-  };
 
   return (
     <>
@@ -42,8 +37,7 @@ export const Recipes = () => {
                     className="searchRecipe"
                     placeholder="Search here..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleKeyPress} // Add the event listener
+                    onChange={(event) => setSearchQuery(event.target.value)}
                   />
                   <button className="button" onClick={getRecipeList}>
                     Search
@@ -57,20 +51,20 @@ export const Recipes = () => {
               <div id="meal">
                 {recipeList.map((meal, index) => (
                   <div className="meal-item" key={index}>
-                    <h3>{meal.Receipe}</h3>
+                    <h3>{meal.recName}</h3>
                     <p>
-                      <strong>Time:</strong> {meal.Time}
+                      <strong>Time:</strong> {meal.recTime}
                     </p>
                     <p>
                       <strong>Ingredients:</strong>
                     </p>
                     <ul>
-                      {meal.Ingredients.split("\n").map((ingredient, i) => (
+                      {meal.recIngredients.split("\n").map((ingredient, i) => (
                         <li key={i}>{ingredient.trim()}</li>
                       ))}
                     </ul>
                     <p>
-                      <strong>Instructions:</strong> {meal.Instructions}
+                      <strong>Instructions:</strong> {meal.recInstructions}
                     </p>
                   </div>
                 ))}
