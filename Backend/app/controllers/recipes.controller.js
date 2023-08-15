@@ -22,6 +22,7 @@ exports.create = (req, res) => {
   const newRecipe = {
     recID: req.body.recID,
     recName: req.body.recName,
+    recImageUrl: req.body.recImageUrl,
     recTime: req.body.recTime,
     recIngredients: req.body.recIngredients,
     recInstructions: req.body.recInstructions,

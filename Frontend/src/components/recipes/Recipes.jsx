@@ -52,6 +52,7 @@ export const Recipes = () => {
                 {recipeList.map((meal, index) => (
                   <div className="meal-item" key={index}>
                     <h3>{meal.recName}</h3>
+                    <img src={meal.recImageUrl}></img>
                     <p>
                       <strong>Time:</strong> {meal.recTime}
                     </p>
