@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
     recName: {
       type: Sequelize.STRING
     },
+    recImageUrl: {
+      type: Sequelize.STRING
+    },
     recTime: {
       type: Sequelize.STRING
     },
