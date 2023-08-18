@@ -12,7 +12,7 @@ import requests
 
 
 #read excel
-df = pd.read_excel('newRecipes.xlsx')
+df = pd.read_excel('Recipes.xlsx')
 #make a duplicate in case original df is needed in the following steps
 df1=df 
 #print(df1.head(15))
@@ -20,14 +20,21 @@ df1=df
 
 # In[3]:
 
+# original dataset contains 146 rows
+# drop the rows only have data in "]poiughfh", then drop the column "]poiughfh", containing 145 rows
+df.dropna(subset='Receipe', inplace=True)
+df.drop(columns="]poiughfh", inplace=True)
 
-#do some cleaning on df
-m=df['Receipe'].isnull() & df['Time'].notnull()
-df.loc[m, ['Receipe', 'Time']] = df.loc[m, ['Time', 'Receipe']].values  
-n=df['Receipe'].isnull() & df[']poiughfh'].notnull()
-df.loc[n, ['Receipe', ']poiughfh']] = df.loc[n, [']poiughfh', 'Receipe']].values
+# There're some rows containing "Instruction" but the "Ingredients" are null,
+# copy the "Instructions".value into "Ingredients" in these rows for further search
+# drop the "Ingredients" null row, now containing 144 rows.
+m = df['Ingredients'].isna() & df['Instructions'].notna()
+df.loc[m, ["Ingredients"]] = df.loc[m, ["Instructions"]].values
+df.dropna(subset="Ingredients", inplace=True)
 
-print(df.head(10))
+
+
+
     
 
 
@@ -45,21 +52,25 @@ api_url = "http://localhost:8080/api/recipes"
 for index, row in df.iterrows():
     data={
         #recID:
-        'recName': row[1],
+        'recName': row[0],
         'recImageUrl':'https://cook-full-recimages.s3.us-east-2.amazonaws.com/'+row[1].replace(' ', '-')+'.png',
-        'recTime': row[3],
-        'recIngredients': row[4],
-        'recInstructions': row[5],
+        'recTime': row[2],
+        'recIngredients': row[3],
+        'recInstructions': row[4],
         
     }
     if pd.notna(row['Receipe']):
         response = requests.post(api_url, json=data)
-         #Process the response if needed
-        print(f"API call for row {index + 1} - Response Status Code: {response.json()}")
+        if response.status_code == 200:
+            try:
+                response_data = response.json()
+                print(f"API call for row {index + 1} - Response Data: {response_data}")
+            except requests.exceptions.JSONDecodeError:
+                print(f"API call for row {index + 1} - Response is not valid JSON.")
+        else:
+            print(f"API call for row {index + 1} - Response Status Code: {response.status_code}")
     else:
         print(f"Skipped API call for row {index + 1} as Receipe is ''.")
-        
-        
 
 
 # In[ ]:
