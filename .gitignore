@@ -131,3 +131,6 @@ dist
 
 # format
 .Ds_Store
+
+# Excel dataset
+.xlsx
