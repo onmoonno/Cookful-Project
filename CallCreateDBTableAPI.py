@@ -12,7 +12,7 @@ import requests
 
 
 #read excel
-df = pd.read_excel('newRecipes.xlsx')
+df = pd.read_excel('Recipes.xlsx')
 #make a duplicate in case original df is needed in the following steps
 df1=df 
 #print(df1.head(15))
@@ -48,8 +48,8 @@ for index, row in df.iterrows():
         'recName': row[1],
         'recImageUrl':'https://cook-full-recimages.s3.us-east-2.amazonaws.com/'+row[1].replace(' ', '-')+'.png',
         'recTime': row[3],
-        'recIngredients': row[4],
-        'recInstructions': row[5],
+        'recIngredients': row[6],
+        'recInstructions': row[7],
         
     }
     if pd.notna(row['Receipe']):
