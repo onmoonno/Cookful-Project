@@ -83,11 +83,18 @@ df1=df
 # In[3]:
 
 
-#do some cleaning on df
-m=df['Receipe'].isnull() & df['Time'].notnull()
-df.loc[m, ['Receipe', 'Time']] = df.loc[m, ['Time', 'Receipe']].values  
-n=df['Receipe'].isnull() & df[']poiughfh'].notnull()
-df.loc[n, ['Receipe', ']poiughfh']] = df.loc[n, [']poiughfh', 'Receipe']].values
+# data cleaning and formating:
+# original dataset contains 146 rows
+# drop the rows only have data in "]poiughfh", then drop the column "]poiughfh", containing 145 rows
+df.dropna(subset='Receipe', inplace=True)
+df.drop(columns="]poiughfh", inplace=True)
+
+# There're some rows containing "Instruction" but the "Ingredients" are null,
+# copy the "Instructions".value into "Ingredients" in these rows for further search
+# drop the "Ingredients" null row, now containing 144 rows.
+m = df['Ingredients'].isna() & df['Instructions'].notna()
+df.loc[m, ["Ingredients"]] = df.loc[m, ["Instructions"]].values
+df.dropna(subset="Ingredients", inplace=True)
 
 # change the time into integer minutes:
 df["Time_min"] = df["Time"].apply(convert_time_to_minutes)
@@ -100,8 +107,8 @@ df["Type"] = df["Type of cuisine"].apply(map_country_to_cuisine)
 
 # adjust the "Difficulty level" column
 df["Difficulty level"] = df["Difficulty level"].str.lstrip()
-#
-# print(df.iloc[5])
+
+
 
 # In[12]:
 
@@ -117,7 +124,7 @@ for index, row in df.iterrows():
     data={
         #recID:
         'recName': row['Receipe'],
-        'recImageUrl':'https://cook-full-recimages.s3.us-east-2.amazonaws.com/'+row['Receipe'].replace(' ', '-')+'.png',
+        'recImageUrl':'https://cookfull-image.s3.us-west-1.amazonaws.com/'+row['Receipe'].replace(' ', '-')+'.png',
         'recTime': row['Time_min'],
         'recTimeString': row['Time'],
         'recIngredients': row['Ingredients'],
