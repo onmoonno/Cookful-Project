@@ -47,23 +47,23 @@ from CallCreateDBTableAPI import format_recipe_name
 
 # In[36]:
 
-#
-# pxl_doc = openpyxl.load_workbook('Recipes.xlsx')
-# sheet = pxl_doc['Sheet1']
-# image_loader = SheetImageLoader(sheet)
-# row_number=df.shape[0]
-#
-# for i in range(2, row_number+2):
-#     try:
-#         image = image_loader.get(f'C{i}')
-#         #image.show()
-#         image_path = '/Users/yunxiazhang/Downloads/Courses/FSE/Cookfull/Cookful-Project/Cookfull_Images'
-#         image_name = df.loc[i-2,'Receipe'].replace(' ', '-')
-#         image.save(f'{image_path}/{image_name}.png')
-#     except:
-#         print(f'c{i} does not contain an image')
-#
-#
+
+pxl_doc = openpyxl.load_workbook('Recipes.xlsx')
+sheet = pxl_doc['Sheet1']
+image_loader = SheetImageLoader(sheet)
+row_number=df.shape[0]
+
+for i in range(2, row_number+2):
+    try:
+        image = image_loader.get(f'C{i}')
+        #image.show()
+        image_path = '/Users/yunxiazhang/Downloads/Courses/FSE/Cookfull/Cookful-Project/Cookfull_Images'
+        image_name = df.loc[i-2,'Receipe'].replace(' ', '-')
+        image.save(f'{image_path}/{image_name}.png')
+    except:
+        print(f'c{i} does not contain an image')
+
+
 
 
 # In[37]:
