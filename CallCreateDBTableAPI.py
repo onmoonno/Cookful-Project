@@ -6,7 +6,42 @@
 
 import pandas as pd
 import requests
+import string
 
+
+def convert_time_to_minutes(rec_time):
+    """
+    the data in "Time" column is string type such as "20 min" or "1.5 hours",
+    convert the data into float type with a uniform scale of minute,
+    for further filter comparation.
+    :param rec_time: string
+    :return: minute: float
+    """
+    # Check if the value is a valid string or NaN (float)
+    if pd.isna(rec_time):
+        return 0
+
+    rec_time_list = rec_time.split(" ")
+    if rec_time_list[1] == "min":
+        return float(rec_time_list[0])
+    else:
+        return float(rec_time_list[0]) * 60
+
+
+def format_recipe_name(name):
+    """
+       delete any exist bracket or colons in the recipe name,
+       and format the name with title.
+       :param name:
+       :return:
+       """
+    formatted_name = name.str.title()
+    # Define a set of punctuation characters and remove them
+    punctuation = string.punctuation
+    formatted_name = formatted_name.str.translate(str.maketrans('', '', punctuation))
+    # Remove leading white spaces
+    formatted_name = formatted_name.str.lstrip()
+    return formatted_name
 
 # In[2]:
 
@@ -27,12 +62,16 @@ df.loc[m, ['Receipe', 'Time']] = df.loc[m, ['Time', 'Receipe']].values
 n=df['Receipe'].isnull() & df[']poiughfh'].notnull()
 df.loc[n, ['Receipe', ']poiughfh']] = df.loc[n, [']poiughfh', 'Receipe']].values
 
-print(df.head(10))
+# change the time into integer minutes:
+df["Time_min"] = df["Time"].apply(convert_time_to_minutes)
+print(df["Type of cuisine"].unique())
     
+# format the recipe name
+df["Receipe"] = format_recipe_name(df["Receipe"])
 
+# print(df["Receipe"])
 
 # In[12]:
-
 
 df = df.fillna('')
 num_rows = len(df)
@@ -47,10 +86,10 @@ for index, row in df.iterrows():
         #recID:
         'recName': row[1],
         'recImageUrl':'https://cook-full-recimages.s3.us-east-2.amazonaws.com/'+row[1].replace(' ', '-')+'.png',
-        'recTime': row[3],
+        'recTime': row[9],
         'recIngredients': row[6],
         'recInstructions': row[7],
-        
+
     }
     if pd.notna(row['Receipe']):
         response = requests.post(api_url, json=data)
@@ -58,11 +97,9 @@ for index, row in df.iterrows():
         print(f"API call for row {index + 1} - Response Status Code: {response.json()}")
     else:
         print(f"Skipped API call for row {index + 1} as Receipe is ''.")
-        
-        
 
 
-# In[ ]:
+
 
 
 
