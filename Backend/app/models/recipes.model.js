@@ -12,12 +12,24 @@ module.exports = (sequelize, Sequelize) => {
     recTime: {
       type: Sequelize.FLOAT
     },
+    recTimeString: {
+      type: Sequelize.STRING
+    },
     recIngredients: {
       type: Sequelize.TEXT     /*ARRAY(Sequelize.TEXT)*/
     },
     recInstructions: {
       type: Sequelize.TEXT
-    }
+    },
+    recCuisineType: {
+      type: Sequelize.TEXT
+    },
+    recCountry: {
+      type: Sequelize.TEXT
+    },
+    recDifficulty: {
+      type: Sequelize.TEXT
+    },
 
   });
 

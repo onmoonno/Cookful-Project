@@ -24,8 +24,14 @@ exports.create = (req, res) => {
     recName: req.body.recName,
     recImageUrl: req.body.recImageUrl,
     recTime: req.body.recTime,
+    recTimeString: req.body.recTimeString,
     recIngredients: req.body.recIngredients,
     recInstructions: req.body.recInstructions,
+    recCuisineType: req.body.recCuisineType,
+    recCountry: req.body.recCountry,
+    recDifficulty: req.body.recDifficulty,
+
+
     //recLevel: req.body.recLevel
   };
 
@@ -47,9 +53,14 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   const recIngredients = req.query.recIngredients;
   const timeRange = req.query.recTimeFilter;
-  let temp=null;
+  const difficultyLevel = req.query.recDifficulty;
+  const cuisineType = req.query.recCuisineType;
+
+  let temp = null;
+
+  // Handle time range conditions as you were doing before
   if (timeRange === "1") {
-    temp = { recTime: {[Op.lt]: 15 } };
+    temp = { recTime: { [Op.lt]: 15 } };
   } else if (timeRange === "2") {
     temp = { recTime: { [Op.between]: [15, 30] } };
   } else if (timeRange === "3") {
@@ -57,31 +68,35 @@ exports.findAll = (req, res) => {
   } else if (timeRange === "4") {
     temp = { recTime: { [Op.gt]: 60 } };
   }
-  let condition = null;
-  if (recIngredients) {
-    const ingredientList = recIngredients.split(',');
-    condition = {
-      [Op.and]: [
-        ingredientList.map(recIngredient => ({
-        recIngredients: { [Op.iLike]: `%${recIngredient}%`} })),
-        temp
-      ]
-    };
+
+  // Create separate condition objects for difficulty level and cuisine type
+  const condition = { ...temp }; // Start with the time conditions
+
+  if (difficultyLevel !== 'all') {
+    condition.recDifficulty = difficultyLevel;
   }
 
+  if (cuisineType !== 'all') {
+    condition.recCuisineType = cuisineType;
+  }
 
-  Recipes.findAll({ where: condition })
+  // Construct the final where condition
+  const whereCondition = {
+    [Op.and]: [
+      condition, // Add time, difficulty, and cuisine conditions here
+    ],
+  };
+
+  Recipes.findAll({ where: whereCondition })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message:
-          err.message || "Error Occurred"
+        message: err.message || "Error Occurred"
       });
     });
-  };
-  
+};
 
 
 

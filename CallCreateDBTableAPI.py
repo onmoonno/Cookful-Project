@@ -43,6 +43,33 @@ def format_recipe_name(name):
     formatted_name = formatted_name.str.lstrip()
     return formatted_name
 
+
+def map_country_to_cuisine(country):
+    """Function to map country to cuisine type
+
+    :param country:
+    :return: 'other' if not mention in the mapping
+    """
+    # Define the cuisine type mapping inside the function
+    cuisine_mapping = {
+        'African Cuisine': ["Egypt", "Morocco", "Nigeria", "South Africa", "Ethiopia", "Senegal"],
+        'Asian Cuisine': ["China", "Chinese ", "India", "Japan", "Thailand", "South Korea", "Vietnam"],
+        'European Cuisine': ["French", "British", "France", "Italy", "Swedish", "Dutch", "Polish", "Eastern Europe",
+                             "Greece", "Scotland", "Ukraine", "Russian", "Nordic countries", "Austrian", "Austrians",
+                             "Spanish", "Swedish", "Hungarian", "Portuguese", "Scandinavian", "German", "Greek",
+                             "Central Europe", "UK", "Czech", "Germany", "Belgian"],
+        'North American Cuisine': ["USA", "Canada", "Mexico"],
+        'South American Cuisine': ["Brazil", "Argentina", "Peru", "Chile", "Colombia", "Venezuela"],
+        'Australian and Oceanian Cuisine': ["Australia", "New Zealand", "Fiji", "Papua New Guinea", "Samoa", "Tonga"]
+    }
+
+    for cuisine, countries in cuisine_mapping.items():
+        if country in countries:
+            return cuisine
+
+    return 'Other'  # If not found in any mapping
+
+
 # In[2]:
 
 
@@ -64,12 +91,17 @@ df.loc[n, ['Receipe', ']poiughfh']] = df.loc[n, [']poiughfh', 'Receipe']].values
 
 # change the time into integer minutes:
 df["Time_min"] = df["Time"].apply(convert_time_to_minutes)
-print(df["Type of cuisine"].unique())
     
 # format the recipe name
 df["Receipe"] = format_recipe_name(df["Receipe"])
 
-# print(df["Receipe"])
+# group the type of cuisine into 6 groups, and create a country column to hold the value
+df["Type"] = df["Type of cuisine"].apply(map_country_to_cuisine)
+
+# adjust the "Difficulty level" column
+df["Difficulty level"] = df["Difficulty level"].str.lstrip()
+#
+# print(df.iloc[5])
 
 # In[12]:
 
@@ -84,11 +116,16 @@ api_url = "http://localhost:8080/api/recipes"
 for index, row in df.iterrows():
     data={
         #recID:
-        'recName': row[1],
-        'recImageUrl':'https://cook-full-recimages.s3.us-east-2.amazonaws.com/'+row[1].replace(' ', '-')+'.png',
-        'recTime': row[9],
-        'recIngredients': row[6],
-        'recInstructions': row[7],
+        'recName': row['Receipe'],
+        'recImageUrl':'https://cook-full-recimages.s3.us-east-2.amazonaws.com/'+row['Receipe'].replace(' ', '-')+'.png',
+        'recTime': row['Time_min'],
+        'recTimeString': row['Time'],
+        'recIngredients': row['Ingredients'],
+        'recInstructions': row['Instructions'],
+        'recCuisineType': row['Type'],
+        'recDifficulty': row['Difficulty level'],
+        'recCountry': row['Type of cuisine'],
+
 
     }
     if pd.notna(row['Receipe']):
