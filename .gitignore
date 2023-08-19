@@ -134,3 +134,9 @@ dist
 
 # Excel dataset
 .xlsx
+
+# Protect S3 key
+FetchImageSaveToS3.py
+
+# Images
+.png
