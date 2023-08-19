@@ -80,6 +80,19 @@ exports.findAll = (req, res) => {
     condition.recCuisineType = cuisineType;
   }
 
+  if (recIngredients) {
+    // Split the recIngredients string into an array
+    const ingredientsArray = recIngredients.split(',').map(ingredient => ingredient.trim());
+  
+    // Create an array of conditions for each ingredient using [Op.like]
+    const ingredientConditions = ingredientsArray.map(ingredient => ({
+      recIngredients: { [Op.like]: `%${ingredient}%` },
+    }));
+  
+    // Combine ingredient conditions with [Op.and] to match recipes containing all specified ingredients
+    condition[Op.and] = ingredientConditions;
+  }
+
   // Construct the final where condition
   const whereCondition = {
     [Op.and]: [
@@ -98,43 +111,6 @@ exports.findAll = (req, res) => {
     });
 };
 
-
-
-
-  /*exports.filterAll = (req, res) => {
-    const recTime = req.query.recTime;
-    let condition = null;
-    if (recTime) {
-      const timeNo = recTime.split(',')[0]//.map(value => parseInt(value,10));
-      const timeRange = timeNo.map(value => {
-        if (value === 1) {
-          return { recTime: {[Op.lt]: 15 } };
-        } else if (value === 2) {
-          return { recTime: { [Op.between]: [15, 30] } };
-        } else if (value === 3) {
-          return { recTime: { [Op.between]: [30, 60] } };
-        } else if (value === 4) {
-          return { recTime: { [Op.gt]: 1 } };
-        }
-      });
-      condition = {
-        [Op.or]: timeRange
-      };
-    }
-     
-  Recipes.filterAll({ where: condition })
-  .then(data => {
-    res.send(data);
-  })
-  .catch(err => {
-    res.status(500).send({
-      message:
-        err.message || "Error Occurred"
-    });
-  });
-};*/
-  
-  
 
 
 
