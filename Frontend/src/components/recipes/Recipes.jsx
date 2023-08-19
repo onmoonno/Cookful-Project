@@ -6,9 +6,10 @@ import "../styles/specialRecipes.css";
 export const Recipes = () => {
   const [recipeList, setRecipeList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterQuery, setFilterQuery] = useState("1");
 
   function getRecipeList() {
-    fetch(`http://localhost:8080/api/recipes?recIngredients=${searchQuery}`)
+    fetch(`http://localhost:8080/api/recipes?recIngredients=${searchQuery}&recTimeFilter=${filterQuery}`)
       .then((response) => response.json())
       .then((data) => {//???
         console.log(data);
@@ -45,6 +46,26 @@ export const Recipes = () => {
                 </div>
               </div>
             </div>
+           
+            <label htmlFor="select time">Select Your Cooking Time:</label>
+
+            &nbsp;&nbsp;
+            <select name="cooking time" 
+                    id="cooking time"
+                    value={filterQuery}
+                    onChange={(event) => setFilterQuery(event.target.value)} >
+              <option value="1">Less Than 15Mins</option>
+              <option value="2">15Mins - 30Mins</option>
+              <option value="3">30Mins - 60Mins</option>
+              <option value="4">Over 1Hr</option>
+            </select>
+            
+            
+            
+            
+            
+          
+
 
             <div className="meal-result">
               <h2 className="title">Your Search Results:</h2>
@@ -52,7 +73,10 @@ export const Recipes = () => {
                 {recipeList.map((meal, index) => (
                   <div className="meal-item" key={index}>
                     <h3>{meal.recName}</h3>
-                    <img src={meal.recImageUrl}></img>
+                    <img src={meal.recImageUrl} alt="Recipe Image"></img>
+                    <p>
+                      <strong>Level:</strong> {meal.recLevel}
+                    </p>
                     <p>
                       <strong>Time:</strong> {meal.recTime}
                     </p>

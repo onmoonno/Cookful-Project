@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING
     },
     recTime: {
-      type: Sequelize.STRING
+      type: Sequelize.FLOAT
     },
     recIngredients: {
       type: Sequelize.TEXT     /*ARRAY(Sequelize.TEXT)*/
@@ -18,6 +18,7 @@ module.exports = (sequelize, Sequelize) => {
     recInstructions: {
       type: Sequelize.TEXT
     }
+
   });
 
   

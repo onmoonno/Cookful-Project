@@ -26,6 +26,7 @@ exports.create = (req, res) => {
     recTime: req.body.recTime,
     recIngredients: req.body.recIngredients,
     recInstructions: req.body.recInstructions,
+    //recLevel: req.body.recLevel
   };
 
   // Save Recipe in the database
@@ -41,18 +42,33 @@ exports.create = (req, res) => {
     });
 };
 
+
 // Retrieve all Recipes from the database.
 exports.findAll = (req, res) => {
   const recIngredients = req.query.recIngredients;
+  const timeRange = req.query.recTimeFilter;
+  let temp=null;
+  if (timeRange === "1") {
+    temp = { recTime: {[Op.lt]: 15 } };
+  } else if (timeRange === "2") {
+    temp = { recTime: { [Op.between]: [15, 30] } };
+  } else if (timeRange === "3") {
+    temp = { recTime: { [Op.between]: [30, 60] } };
+  } else if (timeRange === "4") {
+    temp = { recTime: { [Op.gt]: 60 } };
+  }
   let condition = null;
   if (recIngredients) {
     const ingredientList = recIngredients.split(',');
     condition = {
-      [Op.and]: ingredientList.map(recIngredient => ({
-        recIngredients: { [Op.iLike]: `%${recIngredient}%` }
-      }))
+      [Op.and]: [
+        ingredientList.map(recIngredient => ({
+        recIngredients: { [Op.iLike]: `%${recIngredient}%`} })),
+        temp
+      ]
     };
   }
+
 
   Recipes.findAll({ where: condition })
     .then(data => {
@@ -65,6 +81,58 @@ exports.findAll = (req, res) => {
       });
     });
   };
+  
+
+
+
+
+  /*exports.filterAll = (req, res) => {
+    const recTime = req.query.recTime;
+    let condition = null;
+    if (recTime) {
+      const timeNo = recTime.split(',')[0]//.map(value => parseInt(value,10));
+      const timeRange = timeNo.map(value => {
+        if (value === 1) {
+          return { recTime: {[Op.lt]: 15 } };
+        } else if (value === 2) {
+          return { recTime: { [Op.between]: [15, 30] } };
+        } else if (value === 3) {
+          return { recTime: { [Op.between]: [30, 60] } };
+        } else if (value === 4) {
+          return { recTime: { [Op.gt]: 1 } };
+        }
+      });
+      condition = {
+        [Op.or]: timeRange
+      };
+    }
+     
+  Recipes.filterAll({ where: condition })
+  .then(data => {
+    res.send(data);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Error Occurred"
+    });
+  });
+};*/
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
 
 /*Find a single Tutorial with an id
 exports.findOne = (req, res) => {
@@ -130,6 +198,9 @@ exports.delete = (req, res) => {
       });
     });
 };
+
+
+
 
 /* Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
