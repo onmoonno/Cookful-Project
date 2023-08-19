@@ -136,7 +136,7 @@ dist
 .xlsx
 
 # Protect S3 key
-FetchImageSaveToS3.py
+.py
 
 # Images
 .png
