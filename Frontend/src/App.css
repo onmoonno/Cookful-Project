@@ -79,3 +79,17 @@ img {
   display: flex;
   align-items: center;
 }
+
+/* CSS */
+.filter-container {
+  display: flex; /* Display children elements in a row */
+  justify-content: space-between; /* Distribute space evenly between children */
+  align-items: center; /* Vertically center items */
+}
+
+.filter {
+  flex: 1; /* Allow each filter to grow and take equal space */
+  margin-right: 10px; /* Add margin between filters */
+}
+
+/* Add any additional styling as needed */
