@@ -13,7 +13,7 @@ module.exports = app => {
   //router.get("/published", recipes.findAllPublished);
 
   // Retrieve a single recipe with id
-  //router.get("/:id", recipess.findOne);
+  router.get("/:id", recipes.findOne);
 
   // Update a recipe with id
   //router.put("/:id", recipes.update);

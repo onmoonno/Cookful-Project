@@ -1,7 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
   const Recipes = sequelize.define("recipes", {
     recID: {
-      type: Sequelize.STRING
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true, // This makes the recID auto-increment
     },
     recName: {
       type: Sequelize.STRING
