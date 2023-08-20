@@ -90,7 +90,9 @@ function hideModal() {
                 <label htmlFor="select time">Cooking Time:</label>
 
                 &nbsp;&nbsp;
-                <select name="cooking time"
+                <div className="select-container">
+                <select 
+                        name="cooking time"
                         id="cooking time"
                         value={filterQuery}
                         onChange={(event) => setFilterQuery(event.target.value)} >
@@ -100,11 +102,13 @@ function hideModal() {
                   <option value="4">Over 1Hr</option>
                   <option value="nolimit">No limit</option>
                 </select>
+                </div>
               </div>
 
               <div className="filter">
                 <label htmlFor="select-difficulty">Difficulty Level:</label>
                 &nbsp;&nbsp;
+                <div className="select-container">
                 <select
                   name="difficulty"
                   id="select-difficulty"
@@ -116,11 +120,13 @@ function hideModal() {
                   <option value="Medium">Medium</option>
                   <option value="Hard">Hard</option>
                 </select>
+                </div>
               </div>
 
              <div className="filter">
               <label htmlFor="select-cuisine">Cuisine Type:</label>
               &nbsp;&nbsp;
+              <div className="select-container">
               <select
                 name="cuisine"
                 id="select-cuisine"
@@ -136,6 +142,7 @@ function hideModal() {
                 <option value="Australian and Oceanian Cuisine">Australian and Oceanian Cuisine</option>
                 <option value="Other">Other Cuisine</option>
               </select>
+              </div>
               </div>
             </div>
 
