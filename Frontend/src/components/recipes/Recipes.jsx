@@ -3,25 +3,51 @@ import { Header } from "../common/Header";
 import "../styles/recipes.css";
 import "../styles/specialRecipes.css";
 
+
 export const Recipes = () => {
   const [recipeList, setRecipeList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterQuery, setFilterQuery] = useState("nolimit");
   const [difficultyLevel, setDifficultyLevel] = useState("all"); // Initialize with a default value
   const [cuisineType, setCuisineType] = useState("all"); // Initialize with a default value
-
+  const [recipeModal, setRecipeModal] = useState([]); // Intialize Popup recipe detail
 
 
   function getRecipeList() {
     fetch(`http://localhost:8080/api/recipes?recIngredients=${searchQuery}&recTimeFilter=${filterQuery}&recDifficulty=${difficultyLevel}&recCuisineType=${cuisineType}`
  )
       .then((response) => response.json())
-      .then((data) => {//???
+      .then((data) => {
         console.log(data);
-        setRecipeList(data);//???
+        setRecipeList(data);
       });
   }
 
+
+  function showModal(e) {
+    e.preventDefault();
+
+    const mealItem = e.target.closest('[data-recid]');
+  
+  if (mealItem) {
+    // Access the 'data-recid' attribute value using 'dataset'
+    const recID = mealItem.dataset.recid;
+
+    // Now you have the recID, you can proceed with fetching and displaying data
+    fetch(`http://localhost:8080/api/recipes/${recID}`)
+      .then((response) => response.json())
+      .then((data) => setRecipeModal(data));
+
+    const mealDetailsContent = document.querySelector('.meal-details-content');
+    mealDetailsContent.parentElement.classList.add('showRecipe');
+}
+  }
+
+function hideModal() {
+  const mealDetailsContent = document.querySelector('.meal-details-content');
+  mealDetailsContent.parentElement.classList.remove('showRecipe');
+  setRecipeModal([])
+}
 
   function handleKeyPress(event) {
     if (event.key === "Enter") {
@@ -64,7 +90,9 @@ export const Recipes = () => {
                 <label htmlFor="select time">Cooking Time:</label>
 
                 &nbsp;&nbsp;
-                <select name="cooking time"
+                <div className="select-container">
+                <select 
+                        name="cooking time"
                         id="cooking time"
                         value={filterQuery}
                         onChange={(event) => setFilterQuery(event.target.value)} >
@@ -74,11 +102,13 @@ export const Recipes = () => {
                   <option value="4">Over 1Hr</option>
                   <option value="nolimit">No limit</option>
                 </select>
+                </div>
               </div>
 
               <div className="filter">
                 <label htmlFor="select-difficulty">Difficulty Level:</label>
                 &nbsp;&nbsp;
+                <div className="select-container">
                 <select
                   name="difficulty"
                   id="select-difficulty"
@@ -90,11 +120,13 @@ export const Recipes = () => {
                   <option value="Medium">Medium</option>
                   <option value="Hard">Hard</option>
                 </select>
+                </div>
               </div>
 
              <div className="filter">
               <label htmlFor="select-cuisine">Cuisine Type:</label>
               &nbsp;&nbsp;
+              <div className="select-container">
               <select
                 name="cuisine"
                 id="select-cuisine"
@@ -110,48 +142,73 @@ export const Recipes = () => {
                 <option value="Australian and Oceanian Cuisine">Australian and Oceanian Cuisine</option>
                 <option value="Other">Other Cuisine</option>
               </select>
+              </div>
+              </div>
             </div>
 
-
-           </div>
-
             
-            
-            
-          
-
-
-            <div className="meal-result">
+           <div className="meal-result">
               <h2 className="title">Your Search Results:</h2>
               <div id="meal">
-                {recipeList.map((meal, index) => (
-                  <div className="meal-item" key={index}>
-                    <h3>{meal.recName}</h3>
-                    <img src={meal.recImageUrl} alt="Recipe Image"></img>
-                    <p>
-                      <strong>Level:</strong> {meal.recDifficulty}
-                    </p>
-                    <p>
-                      <strong>Time:</strong> {meal.recTimeString}
-                    </p>
-                    <p>
-                      <strong>Cuisine Type:</strong> {meal.recCountry}
-                    </p>
-                    <p>
-                      <strong>Ingredients:</strong>
-                    </p>
-                    <ul>
-                      {meal.recIngredients.split("\n").map((ingredient, i) => (
-                        <li key={i}>{ingredient.trim()}</li>
-                      ))}
-                    </ul>
-                    <p>
-                      <strong>Instructions:</strong> {meal.recInstructions}
-                    </p>
+                {recipeList.map(meal => (
+                  <div className="meal-item" data-recid={meal.recID}>
+                    <div >
+                      <div class="image"><img src={meal.recImageUrl} alt=""/></div>
+                      <div class="rating">
+                          <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
+                          <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
+                          <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
+                          <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
+                          <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
+                      </div>
+                      <h4>{meal.recName}</h4>
+                      <div class="price">
+                          <span>Price: </span><span class="color">${20}</span>
+                      </div>
+                      <div onClick = {(e) => showModal(e)} class="button btn" style={{marginTop: "20px", marginBottom: "20px"}}>View Recipe</div>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
+
+            <div className = {"meal-wrapper"}>
+                <div class = "meal-details">
+                    <button type = "button" class = "btn recipe-close-btn" id = "recipe-close-btn" onClick={() => hideModal()}>x</button>
+                    <div class = "meal-details-content">
+                        <h2 class = "recipe-title">{recipeModal.recName}</h2>
+                        <div class = "recipe-meal-img" style={{marginBottom: "2.5em"}}>
+                            <img src ={recipeModal.recImageUrl} alt = ""/>
+                        </div>
+                        <p>
+                          <strong>Level:</strong> {recipeModal.recDifficulty}
+                        </p>
+                        <p>
+                          <strong>Time:</strong> {recipeModal.recTimeString}
+                        </p>
+                        <p>
+                          <strong>Cuisine Type:</strong> {recipeModal.recCountry}
+                        </p>
+                        <p>
+                          <strong>Ingredients:</strong>
+                        </p>
+                        <ul>
+                          {recipeModal.recIngredients && recipeModal.recIngredients.split("\n").map((ingredient, i) => (
+                            <li key={i}>{ingredient.trim()}</li>
+                          ))}
+                        </ul>
+                        <div class = "recipe-instruct">
+                          <p>
+                            <strong>Instructions:</strong> {recipeModal.recInstructions}
+                          </p>
+                        </div>
+                        
+                     </div>
+                  </div>
+             </div>
+             
+              
+            
           </div>
         </div>
       </header>
