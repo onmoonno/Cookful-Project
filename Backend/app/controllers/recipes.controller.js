@@ -10,13 +10,6 @@ exports.health = (req, res) => {
 
 // Create and Save a new Recipe
 exports.create = (req, res) => {
-  /* Validate request
-  if (!req.body.recName) {
-    res.status(400).send({
-      message: "No recipe found!"
-    });
-    return;
-  }*/
 
   // Create a Recipe
   const newRecipe = {

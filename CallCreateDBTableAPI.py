@@ -81,26 +81,24 @@ df1=df
 
 
 # In[3]:
-
-
 # data cleaning and formating:
 # original dataset contains 146 rows
 # drop the rows only have data in "]poiughfh", then drop the column "]poiughfh", containing 145 rows
 df.dropna(subset='Receipe', inplace=True)
-df.drop(columns="]poiughfh", inplace=True)
+df.drop(columns=']poiughfh', inplace=True)
 
 # There're some rows containing "Instruction" but the "Ingredients" are null,
 # copy the "Instructions".value into "Ingredients" in these rows for further search
 # drop the "Ingredients" null row, now containing 144 rows.
 m = df['Ingredients'].isna() & df['Instructions'].notna()
-df.loc[m, ["Ingredients"]] = df.loc[m, ["Instructions"]].values
+df.loc[m, ['Ingredients']] = df.loc[m, ['Instructions']].values
 df.dropna(subset="Ingredients", inplace=True)
 
 # change the time into integer minutes:
-df["Time_min"] = df["Time"].apply(convert_time_to_minutes)
+df['Time_min'] = df['Time'].apply(convert_time_to_minutes)
     
 # format the recipe name
-df["Receipe"] = format_recipe_name(df["Receipe"])
+df['Receipe'] = format_recipe_name(df['Receipe'])
 
 # group the type of cuisine into 6 groups, and create a country column to hold the value
 df["Type"] = df["Type of cuisine"].apply(map_country_to_cuisine)
@@ -108,23 +106,21 @@ df["Type"] = df["Type of cuisine"].apply(map_country_to_cuisine)
 # adjust the "Difficulty level" column
 df["Difficulty level"] = df["Difficulty level"].str.lstrip()
 
-
+# remove duplicates:
+df.drop_duplicates(subset=None, keep='first', inplace=True)
+# print(df.info)
 
 # In[12]:
 
 df = df.fillna('')
 num_rows = len(df)
 api_url = "http://localhost:8080/api/recipes"
-#recImagesUrl='https://cook-full-recimages.s3.us-east-2.amazonaws.com/'+df.iloc[1, 1].replace(' ', '-')+'.png'
-#rint(recImagesUrl)
-
-
 
 for index, row in df.iterrows():
     data={
-        #recID:
         'recName': row['Receipe'],
-        'recImageUrl':'https://cookfull-image.s3.us-west-1.amazonaws.com/'+row['Receipe'].replace(' ', '-')+'.png',
+        'recImageUrl':f"https://cookfull-image.s3.us-west-1.amazonaws.com/{row['PhotoID']}.png",
+        'recPhotoID': row['PhotoID'],
         'recTime': row['Time_min'],
         'recTimeString': row['Time'],
         'recIngredients': row['Ingredients'],
@@ -132,8 +128,6 @@ for index, row in df.iterrows():
         'recCuisineType': row['Type'],
         'recDifficulty': row['Difficulty level'],
         'recCountry': row['Type of cuisine'],
-
-
     }
     if pd.notna(row['Receipe']):
         response = requests.post(api_url, json=data)
