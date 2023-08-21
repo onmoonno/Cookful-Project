@@ -32,7 +32,9 @@ module.exports = (sequelize, Sequelize) => {
     recDifficulty: {
       type: Sequelize.TEXT
     },
-
+    recPhotoID: {
+      type: Sequelize.INTEGER,
+    },
   });
 
   
