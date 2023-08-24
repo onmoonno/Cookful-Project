@@ -74,7 +74,7 @@ def map_country_to_cuisine(country):
 
 
 #read excel
-df = pd.read_excel('Recipes.xlsx')
+df = pd.read_excel('Recipes_addimage_url.xlsx')
 #make a duplicate in case original df is needed in the following steps
 df1=df 
 #print(df1.head(15))
@@ -92,7 +92,7 @@ df.drop(columns=']poiughfh', inplace=True)
 # drop the "Ingredients" null row, now containing 144 rows.
 m = df['Ingredients'].isna() & df['Instructions'].notna()
 df.loc[m, ['Ingredients']] = df.loc[m, ['Instructions']].values
-df.dropna(subset="Ingredients", inplace=True)
+df.dropna(subset='Ingredients', inplace=True)
 
 # change the time into integer minutes:
 df['Time_min'] = df['Time'].apply(convert_time_to_minutes)
@@ -106,9 +106,12 @@ df["Type"] = df["Type of cuisine"].apply(map_country_to_cuisine)
 # adjust the "Difficulty level" column
 df["Difficulty level"] = df["Difficulty level"].str.lstrip()
 
+# drop the recipes without the Image
+df.dropna(subset='Image URL', inplace=True)
+
 # remove duplicates:
 df.drop_duplicates(subset=None, keep='first', inplace=True)
-# print(df.info)
+
 
 # In[12]:
 
@@ -119,9 +122,8 @@ api_url = "http://localhost:8080/api/recipes"
 for index, row in df.iterrows():
     data={
         'recName': row['Receipe'],
-        'recImageUrl':f"https://cookfull-image.s3.us-west-1.amazonaws.com/{row['PhotoID']}.png",
+        'recImageUrl':row['Image URL'],
         'recTime': row['Time_min'],
-        'recPhotoID': row['PhotoID'],
         'recTimeString': row['Time'],
         'recIngredients': row['Ingredients'],
         'recInstructions': row['Instructions'],
