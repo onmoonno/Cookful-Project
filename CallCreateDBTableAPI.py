@@ -120,8 +120,8 @@ for index, row in df.iterrows():
     data={
         'recName': row['Receipe'],
         'recImageUrl':f"https://cookfull-image.s3.us-west-1.amazonaws.com/{row['PhotoID']}.png",
-        'recPhotoID': row['PhotoID'],
         'recTime': row['Time_min'],
+        'recPhotoID': row['PhotoID'],
         'recTimeString': row['Time'],
         'recIngredients': row['Ingredients'],
         'recInstructions': row['Instructions'],
@@ -129,16 +129,10 @@ for index, row in df.iterrows():
         'recDifficulty': row['Difficulty level'],
         'recCountry': row['Type of cuisine'],
     }
+
     if pd.notna(row['Receipe']):
         response = requests.post(api_url, json=data)
          #Process the response if needed
         print(f"API call for row {index + 1} - Response Status Code: {response.json()}")
     else:
         print(f"Skipped API call for row {index + 1} as Receipe is ''.")
-
-
-
-
-
-
-

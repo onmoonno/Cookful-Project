@@ -23,9 +23,7 @@ exports.create = (req, res) => {
     recCuisineType: req.body.recCuisineType,
     recCountry: req.body.recCountry,
     recDifficulty: req.body.recDifficulty,
-
-
-    //recLevel: req.body.recLevel
+    recPhotoID: req.body.recPhotoID,
   };
 
   // Save Recipe in the database
@@ -78,12 +76,10 @@ exports.findAll = (req, res) => {
     const ingredientsArray = recIngredients.split(',').map(ingredient => ingredient.trim());
   
     // Create an array of conditions for each ingredient using [Op.like]
-    const ingredientConditions = ingredientsArray.map(ingredient => ({
-      recIngredients: { [Op.like]: `%${ingredient}%` },
-    }));
-  
     // Combine ingredient conditions with [Op.and] to match recipes containing all specified ingredients
-    condition[Op.and] = ingredientConditions;
+    condition[Op.and] = ingredientsArray.map(ingredient => ({
+      recIngredients: {[Op.like]: `%${ingredient}%`},
+    }));
   }
 
   // Construct the final where condition

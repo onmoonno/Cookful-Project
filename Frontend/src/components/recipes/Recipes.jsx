@@ -77,7 +77,7 @@ function hideModal() {
                     placeholder="Search here..."
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
-                    onKeyPress={handleKeyPress} // Add this line to handle key press
+                    onKeyDown={handleKeyPress} // Add this line to handle key press
                   />
                   <button className="button" onClick={getRecipeList}>
                     Search
