@@ -6,6 +6,7 @@ from openpyxl_image_loader import SheetImageLoader
 
 # Load Excel file and DataFrame
 df = pd.read_excel('Recipes.xlsx')
+df['Image URL'] = ""
 
 # Load the workbook and sheet
 pxl_doc = openpyxl.load_workbook('Recipes.xlsx', data_only=True)  # Use data_only=True to load cell values, not formulas
@@ -23,12 +24,17 @@ for i in range(2, row_number + 2):
         image = image_loader.get(cell_reference)
         if image is not None:
             image_path = '/Users/yunxiazhang/Downloads/Courses/FSE/Cookfull/Cookful-Project/Cookfull_Images'
-            image_name = df.loc[i - 2, 'PhotoID']
+            image_name = i - 1
             image.save(f'{image_path}/{image_name}.png')
+           
+            # Store the image url
+            df.loc[i - 2, 'Image URL'] = f"https://cookfull-image.s3.us-west-1.amazonaws.com/{i - 1}.png"
         else:
             print(f'{cell_reference} does not contain an image')
     except Exception as e:
         print(f'Error processing {cell_reference}: {str(e)}')
+
+df.to_excel('Recipes_addimage_url.xlsx')
 
 
 

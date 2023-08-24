@@ -23,7 +23,6 @@ exports.create = (req, res) => {
     recCuisineType: req.body.recCuisineType,
     recCountry: req.body.recCountry,
     recDifficulty: req.body.recDifficulty,
-    recPhotoID: req.body.recPhotoID,
   };
 
   // Save Recipe in the database
@@ -78,7 +77,7 @@ exports.findAll = (req, res) => {
     // Create an array of conditions for each ingredient using [Op.like]
     // Combine ingredient conditions with [Op.and] to match recipes containing all specified ingredients
     condition[Op.and] = ingredientsArray.map(ingredient => ({
-      recIngredients: {[Op.like]: `%${ingredient}%`},
+      recIngredients: {[Op.iLike]: `%${ingredient}%`},
     }));
   }
 
