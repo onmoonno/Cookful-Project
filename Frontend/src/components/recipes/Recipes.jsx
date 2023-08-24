@@ -77,7 +77,7 @@ function hideModal() {
                     placeholder="Search here..."
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
-                    onKeyPress={handleKeyPress} // Add this line to handle key press
+                    onKeyDown={handleKeyPress} // Add this line to handle key press
                   />
                   <button className="button" onClick={getRecipeList}>
                     Search
@@ -96,11 +96,11 @@ function hideModal() {
                         id="cooking time"
                         value={filterQuery}
                         onChange={(event) => setFilterQuery(event.target.value)} >
+                  <option value="nolimit">No limit</option>
                   <option value="1">Less Than 15Mins</option>
                   <option value="2">15Mins - 30Mins</option>
                   <option value="3">30Mins - 60Mins</option>
                   <option value="4">Over 1Hr</option>
-                  <option value="nolimit">No limit</option>
                 </select>
                 </div>
               </div>
