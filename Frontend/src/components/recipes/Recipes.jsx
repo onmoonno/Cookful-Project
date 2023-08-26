@@ -165,7 +165,7 @@ function hideModal() {
                 {recipeList.map(meal => (
                   <div className="meal-item" data-recid={meal.recID}>
                     <div >
-                      <div class="image"><img src={meal.recImageUrl} alt=""/></div>
+                      <div class="image"><img src={meal.recResizedImageURL} alt=""/></div>
                       <div class="rating">
                           <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
                           <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
@@ -174,9 +174,7 @@ function hideModal() {
                           <span><i style={{color: "orange"}} class="bx bxs-star"></i></span>
                       </div>
                       <h4>{meal.recName}</h4>
-                      <div class="price">
-                          <span>Price: </span><span class="color">${20}</span>
-                      </div>
+                      
                       <div onClick = {(e) => showModal(e)} class="button btn" style={{marginTop: "20px", marginBottom: "20px"}}>View Recipe</div>
                     </div>
                   </div>
@@ -192,7 +190,7 @@ function hideModal() {
                     <div class = "meal-details-content">
                         <h2 class = "recipe-title">{recipeModal.recName}</h2>
                         <div class = "recipe-meal-img" style={{marginBottom: "2.5em"}}>
-                            <img src ={recipeModal.recImageUrl} alt = ""/>
+                            <img src ={recipeModal.recResizedImageURL} alt = ""/>
                         </div>
                         <p>
                           <strong>Level:</strong> {recipeModal.recDifficulty}

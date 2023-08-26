@@ -124,6 +124,7 @@ for index, row in df.iterrows():
     data = {
         'recName': row['Receipe'],
         'recImageUrl': row['Image URL'],
+        'recResizedImageURL': row['Resized Image URL'],
         'recTime': row['Time_min'],
         'recTimeString': row['Time'],
         'recIngredients': row['Ingredients'],
