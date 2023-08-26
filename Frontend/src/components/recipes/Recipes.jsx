@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Header } from "../common/Header";
 import "../styles/recipes.css";
 import "../styles/specialRecipes.css";
+
 
 
 export const Recipes = () => {
@@ -11,6 +12,7 @@ export const Recipes = () => {
   const [difficultyLevel, setDifficultyLevel] = useState("all"); // Initialize with a default value
   const [cuisineType, setCuisineType] = useState("all"); // Initialize with a default value
   const [recipeModal, setRecipeModal] = useState([]); // Intialize Popup recipe detail
+  const [noResults, setNoResults] = useState(false); // Define noResults state
 
 
   function getRecipeList() {
@@ -20,8 +22,13 @@ export const Recipes = () => {
       .then((data) => {
         console.log(data);
         setRecipeList(data);
+        setNoResults(data.length === 0); // when length is 0 set it noresults.
       });
   }
+  useEffect(() => {
+    // This will run whenever filterQuery, difficultyLevel, or cuisineType changes
+    getRecipeList();
+  }, [filterQuery, difficultyLevel, cuisineType]);
 
 
   function showModal(e) {
@@ -148,7 +155,12 @@ function hideModal() {
 
             
            <div className="meal-result">
+              {noResults ? (
+                <p>No available results found.</p>
+              ) : (
+                <>
               <h2 className="title">Your Search Results:</h2>
+
               <div id="meal">
                 {recipeList.map(meal => (
                   <div className="meal-item" data-recid={meal.recID}>
@@ -170,6 +182,8 @@ function hideModal() {
                   </div>
                 ))}
               </div>
+              </>
+            )}
             </div>
 
             <div className = {"meal-wrapper"}>
@@ -213,5 +227,6 @@ function hideModal() {
         </div>
       </header>
     </>
+    
   );
 };

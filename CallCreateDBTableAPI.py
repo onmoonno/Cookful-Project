@@ -38,7 +38,8 @@ def format_recipe_name(name):
     formatted_name = name.str.title()
     # Define a set of punctuation characters and remove them
     punctuation = string.punctuation
-    formatted_name = formatted_name.str.translate(str.maketrans('', '', punctuation))
+    formatted_name = formatted_name.str.translate(
+        str.maketrans('', '', punctuation))
     # Remove leading white spaces
     formatted_name = formatted_name.str.lstrip()
     return formatted_name
@@ -73,11 +74,11 @@ def map_country_to_cuisine(country):
 # In[2]:
 
 
-#read excel
+# read excel
 df = pd.read_excel('Recipes_addimage_url.xlsx')
-#make a duplicate in case original df is needed in the following steps
-df1=df 
-#print(df1.head(15))
+# make a duplicate in case original df is needed in the following steps
+df1 = df
+# print(df1.head(15))
 
 
 # In[3]:
@@ -96,7 +97,7 @@ df.dropna(subset='Ingredients', inplace=True)
 
 # change the time into integer minutes:
 df['Time_min'] = df['Time'].apply(convert_time_to_minutes)
-    
+
 # format the recipe name
 df['Receipe'] = format_recipe_name(df['Receipe'])
 
@@ -120,9 +121,9 @@ num_rows = len(df)
 api_url = "http://localhost:8080/api/recipes"
 
 for index, row in df.iterrows():
-    data={
+    data = {
         'recName': row['Receipe'],
-        'recImageUrl':row['Image URL'],
+        'recImageUrl': row['Image URL'],
         'recTime': row['Time_min'],
         'recTimeString': row['Time'],
         'recIngredients': row['Ingredients'],
@@ -134,7 +135,8 @@ for index, row in df.iterrows():
 
     if pd.notna(row['Receipe']):
         response = requests.post(api_url, json=data)
-         #Process the response if needed
-        print(f"API call for row {index + 1} - Response Status Code: {response.json()}")
+        # Process the response if needed
+        print(
+            f"API call for row {index + 1} - Response Status Code: {response.json()}")
     else:
         print(f"Skipped API call for row {index + 1} as Receipe is ''.")
