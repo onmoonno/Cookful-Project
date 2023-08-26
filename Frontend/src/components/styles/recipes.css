@@ -77,13 +77,15 @@
 .meal-item > * {
     margin-top: auto; /* Push other components to the bottom */
   }
-.meal-img img{
+.image{
     /* Set a fixed square size for the image container */
-    height: 200px; /* Adjust the height as needed */
+    height: 400px; /* Adjust the height as needed */
     overflow: hidden;
-    max-width: 100%;
-    max-height: 100%;
     display: block;
+}
+.image img{
+    max-height: 100%;
+    max-width: auto;
 }
 .meal-name{
     padding: 1.5rem 0.5rem;

@@ -3,10 +3,43 @@
 import pandas as pd
 import openpyxl
 from openpyxl_image_loader import SheetImageLoader
+from PIL import Image
+
+
+def resize_image(image, required_size):
+    """calculate the center of the image 
+    and then determine the cropping dimensions to make it square 
+    while preserving the center of the original image. 
+    After cropping, it resizes the cropped image to the desired 
+    square size (e.g., 200x200) using anti-aliasing. 
+    """
+
+    # Calculate the center of the image
+    center_x = image.width // 2
+    center_y = image.height // 2
+
+    # Calculate the cropping dimensions to make it square
+    side_length = min(image.width, image.height)
+    left = center_x - (side_length // 2)
+    top = center_y - (side_length // 2)
+    right = center_x + (side_length // 2)
+    bottom = center_y + (side_length // 2)
+
+    # Crop the image to a square
+    cropped_image = image.crop((left, top, right, bottom))
+
+    # resize to desired size
+    resized_image = cropped_image.resize((required_size, required_size), Image.Resampling.LANCZOS)
+
+    return resized_image
+           
+
+
 
 # Load Excel file and DataFrame
 df = pd.read_excel('Recipes.xlsx')
 df['Image URL'] = ""
+df['Resized Image URL'] = ""
 
 # Load the workbook and sheet
 pxl_doc = openpyxl.load_workbook('Recipes.xlsx', data_only=True)  # Use data_only=True to load cell values, not formulas
@@ -26,9 +59,14 @@ for i in range(2, row_number + 2):
             image_path = '/Users/yunxiazhang/Downloads/Courses/FSE/Cookfull/Cookful-Project/Cookfull_Images'
             image_name = i - 1
             image.save(f'{image_path}/{image_name}.png')
+
+
+            resized_image = resize_image(image, 300)
+            resized_image.save(f'{image_path}/{image_name}_resized.png')
            
             # Store the image url
             df.loc[i - 2, 'Image URL'] = f"https://cookfull-image.s3.us-west-1.amazonaws.com/{i - 1}.png"
+            df.loc[i - 2, 'Resized Image URL'] = f"https://cookfull-image.s3.us-west-1.amazonaws.com/{i - 1}_resized.png"
         else:
             print(f'{cell_reference} does not contain an image')
     except Exception as e:

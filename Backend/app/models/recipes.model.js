@@ -11,6 +11,9 @@ module.exports = (sequelize, Sequelize) => {
     recImageUrl: {
       type: Sequelize.STRING
     },
+    recResizedImageURL:{
+      type: Sequelize.STRING
+    },
     recTime: {
       type: Sequelize.FLOAT
     },

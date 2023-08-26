@@ -16,6 +16,7 @@ exports.create = (req, res) => {
     recID: req.body.recID,
     recName: req.body.recName,
     recImageUrl: req.body.recImageUrl,
+    recResizedImageURL: req.body.recResizedImageURL,
     recTime: req.body.recTime,
     recTimeString: req.body.recTimeString,
     recIngredients: req.body.recIngredients,
